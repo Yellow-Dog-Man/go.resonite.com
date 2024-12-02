@@ -22,6 +22,10 @@ block content
         .row
             dt Users (#{totalJoinedUsers}/#{maxUsers}): 
             dd #{sessionUsers.map(user => user.username).join(", ")}
+        if correspondingWorldId
+            .row
+                dt World: 
+                a(href=`/world/${correspondingWorldId.ownerId}/${correspondingWorldId.recordId}`) Show world
     div.center
         a.btn(href=`ressession:///${sessionId}`) Join Session!
     p.center 
