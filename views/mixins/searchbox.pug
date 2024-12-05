@@ -1,0 +1,9 @@
+include svg.pug
+
+mixin searchbox(term, label='Search')
+  form(method='GET')&attributes(attributes).search
+    label(for='term').visually-hidden #{label}
+    input(type='text' name='term' id='search' value=term placeholder=`${label}...`).search__textinput
+    button(type='submit').icon-btn.search__btn
+      +svg('/images/reso_magnifying_glass.svg#magnifying_glass')
+      span.visually-hidden Search

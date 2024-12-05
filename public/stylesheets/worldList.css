@@ -1,0 +1,93 @@
+:root {
+  --listing-spacing: 8px;
+  --listing-line-clamp: 3;
+}
+
+.listing {
+  display:flex;
+  flex-direction: column;
+  gap: var(--listing-spacing);
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.listing-item {
+  display: grid;
+  grid-template: auto auto 1fr / 1fr 2fr;
+  grid-template-areas:
+    "thumbnail heading"
+    "thumbnail author"
+    "thumbnail description";
+  gap: var(--listing-spacing);
+  box-sizing: border-box;
+  padding: var(--listing-spacing);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  background: var(--background);
+}
+
+.listing-item:hover {
+  text-decoration: none;
+}
+
+.listing-item > p {
+  margin: 0;
+  color: var(--text-main);
+}
+
+.listing-item > .thumbnail {
+  grid-area: thumbnail;
+  align-self: center;
+  justify-self: center;
+  max-width: 280px;
+  max-height: 140px;
+}
+
+.listing-item > .thumbnail > img  {
+  transition: transform ease-out 0.2s;
+}
+
+.listing-item:hover .thumbnail > img {
+  transform: scale(1.15);
+}
+
+.listing-item__heading {
+  grid-area: heading;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--links);
+}
+
+.listing-item__author {
+  grid-area: author;
+}
+
+.listing-item:hover > .listing-item__heading {
+  text-decoration: underline;
+}
+
+/** https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp **/
+/** https://caniuse.com/css-line-clamp **/
+.listing-item__description {
+  grid-area: description;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--listing-line-clamp);
+  -webkit-box-orient: vertical;
+  line-clamp: var(--listing-line-clamp);
+  align-self: self-start
+}
+
+@media (max-width: 600px) {
+  .listing-item {
+    grid-template: auto auto auto auto / auto;
+    grid-template-areas:
+      "thumbnail"
+      "heading"
+      "author"
+      "description";
+  }
+}
