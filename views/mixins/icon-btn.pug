@@ -1,0 +1,7 @@
+include btn.pug
+
+mixin icon-btn(text, isDisabled)
+  +btn(isDisabled)&attributes(attributes).btn--icon-only
+    span.visually-hidden #{text}
+    span(aria-hidden="true").btn__icon
+      block

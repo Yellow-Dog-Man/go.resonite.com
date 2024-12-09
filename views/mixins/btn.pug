@@ -1,0 +1,9 @@
+mixin btn(isDisabled)
+  - const btnType = attributes.type
+  - const href = attributes.href
+  if attributes.href != null && !isDisabled
+    a.btn(href=href)&attributes(attributes)
+      block
+  else
+    button.btn(type=btnType class={ 'btn--disabled': isDisabled })&attributes(attributes)
+      block

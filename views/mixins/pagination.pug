@@ -1,0 +1,14 @@
+include icon-btn.pug
+
+mixin pagination(urlPath, fromCount, toCount, pageIndexRangesArray=[])
+  if (pageIndexRangesArray.length)
+    - const pageIndex = isNaN(query.pageIndex) ? 0 : +query.pageIndex
+    - const previousUrl = new URL(urlPath);
+    - const nextUrl = new URL(urlPath);
+    - previousUrl.searchParams.set('pageIndex', pageIndex - 1)
+    - nextUrl.searchParams.set('pageIndex', pageIndex + 1)
+    
+    article.pagination
+      +icon-btn('Previous', pageIndex <= 0)(href=previousUrl.href).btn--blue ⯇
+      p.pagination__page-range #{fromCount} – #{toCount}
+      +icon-btn('Next', !hasMoreResults)(href=nextUrl.href).btn--blue ⯈
