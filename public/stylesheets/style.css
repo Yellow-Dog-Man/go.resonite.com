@@ -1,5 +1,19 @@
 :root {
+  --color-hero-yellow: #f8f770;
+  --color-mid-yellow: #a0a14e;
+  --color-sub-yellow: #484a2c;
+  --color-dark-yellow: #2b2e26;
+  --color-hero-green: #59eb5c;
+  --color-mid-green: #3f9e44;
+  --color-sub-green: #24512c;
+  --color-dark-green: #192d24;
+  --color-hero-blue: #61d1fa;
+  --color-mid-blue: #458fab;
+  --color-sub-blue: #284c5d;
+  --color-dark-blue: #1a2a36; 
   --background-body: #11151d;
+  --border-radius: 8px;
+  --btn--icon-only-size: 36px;
 }
 
 html, body {
@@ -14,13 +28,26 @@ html {
 
 body {
   flex-direction: column;
+  flex: 1;
   box-sizing: border-box;
   max-width: 820px;
   padding: 20px 10px;
 }
 
+:is(h1, h2, h3, h4, h5, h6) svg {
+  width: 1.4em;
+  height: 1.4em;
+}
+
 .subheading {
   font-size: 1rem;
+}
+
+.thumbnail {
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }
 
 .center {
@@ -43,6 +70,7 @@ footer {
 }
 
 .btn {
+  box-sizing: border-box;
   appearance: button;
   border-radius: 6px;
   height: 100px;
@@ -52,11 +80,89 @@ footer {
   align-content: center;
   color: #FFF;
   font-size: 2.5em;
+  transition: background-color var(--animation-duration) linear, border-color var(--animation-duration) linear, color var(--animation-duration) linear, box-shadow var(--animation-duration) linear, transform var(--animation-duration) ease;
 }
+
 
 .btn:hover {
   background: #3f6a47;
   text-decoration: none;
+}
+
+.btn:active {
+  transform: none;
+}
+
+.btn--blue {
+  background-color: var(--color-mid-blue);
+}
+
+.btn--blue:hover {
+  background-color: var(--color-sub-blue)
+}
+
+.btn--blue:active {
+  background-color: var(--color-dark-blue);
+}
+
+.btn--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn--icon-only {
+  width: var(--btn--icon-only-size);
+  height: var(--btn--icon-only-size);
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: none;
+  font-size: 1rem;
+}
+
+.btn--icon-only:hover,
+.btn--icon-only:focus {
+  background: none;
+  color: var(--color-hero-green)
+}
+
+.btn--icon-only.btn--blue:hover,
+.btn--icon-only.btn--blue:focus {
+  background: none;
+  color: var(--color-hero-blue)
+}
+
+.btn--icon-only:hover {
+  background-color: var(--color-dark-green);
+}
+
+.btn--icon-only:active {
+  background-color: var(--color-sub-green);
+}
+
+.btn--icon-only.btn--blue:hover {
+  background-color: var(--color-dark-blue);
+}
+
+.btn--icon-only.btn--blue:active {
+  background-color: var(--color-sub-blue);
+}
+
+.btn svg {
+  height: 100%;
+}
+
+.btn__icon {
+  box-sizing: border-box;
+  padding: 4px;
+}
+
+.btn--icon-only > .btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .infobox dl {
@@ -78,4 +184,14 @@ footer {
 
 .small a {
   font-size: 0.7em;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
 }

@@ -1,0 +1,29 @@
+:root {
+  --srch-input-spacing: 8px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 16px 0 24px;
+}
+
+.search__textinput {
+  flex: 1;
+  padding: var(--srch-input-spacing);
+  padding-right: calc(var(--btn--icon-only-size) + var(--srch-input-spacing));
+  margin: 0;
+  background: var(--background-alt)
+}
+
+.search__textinput::placeholder {
+  font-style: italic;
+}
+
+.search__btn {
+  position: absolute;
+  right: 0;
+  margin: 0 var(--srch-input-spacing) 0 0;
+  background: none;
+}
