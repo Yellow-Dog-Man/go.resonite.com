@@ -1,0 +1,45 @@
+extends layout
+
+include mixins/searchbox.pug
+include mixins/pagination.pug
+
+block head
+  meta(property="og:description" content="Published worlds on Resonite")
+  link(type="application/json+oembed" href=`${urlPath}json`)
+  link(rel='stylesheet' href='/stylesheets/worldList.css')
+  link(rel='stylesheet' href='/stylesheets/searchbox.css')
+  link(rel='stylesheet' href='/stylesheets/pagination.css')
+
+block content
+  h1 World List
+  +searchbox(query.term, 'Search for worlds')(action='')
+  hr
+  if (records.length)
+    ol.listing
+      each world in records
+        li
+          a(href=`${world.goUri}`).listing-item
+            h2.listing-item__heading
+              if (world.isFeatured)
+                +svg('/images/reso_featured_ribbon.svg#featured_ribbon')(aria-hidden=true).listing-item__featured-ribbon
+              span !{world.name}
+              if (world.isFeatured)
+                span.visually-hidden | Featured World
+            p.listing-item__author
+              em By #{world.ownerName}
+            div.thumbnail
+              img(src=`${world.thumbnailUri}`, alt='', width='280', height='140', loading='lazy')
+            p.listing-item__description #{world.description || '(No Description)'}
+    +pagination(urlPath, apiInitBody.offset + 1, apiInitBody.offset + records.length, [query.pageIndex, parseInt(query.pageIndex) + 1])
+  else
+    p
+    | Resonite did not find any worlds that matched the term(s) "
+    strong #{query.term}
+    | ".
+    br
+    | Here are some tips on how to refine your search: 
+    ul
+      li Try fewer terms.
+      li Try more general terms.
+      li Use '+' before the term to require worlds with that term.
+      li Use '-' before the term to exclude worlds with that term.
