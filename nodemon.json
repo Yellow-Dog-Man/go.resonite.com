@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/nodemon.json",
+  "ext": "js,ts,pug",
+  "watch": [
+    "bin",
+    "helpers",
+    "node_modules",
+    "public",
+    "routes",
+    "views",
+    "app.js"
+  ]
+}

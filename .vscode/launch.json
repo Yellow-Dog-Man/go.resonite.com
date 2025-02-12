@@ -15,6 +15,10 @@
       "type": "node",
       "port": 9777,
       "request": "attach",
+      "restart": {
+        "delay": 1000,
+        "maxAttempts": 10
+      },
       "skipFiles": [
         "<node_internals>/**"
       ]
