@@ -10,7 +10,7 @@
   "exports": "./start.js",
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "debug": "~4.4.0",
     "express": "~4.21.2",
     "http-errors": "~1.6.3",
     "isomorphic-dompurify": "^2.16.0",
