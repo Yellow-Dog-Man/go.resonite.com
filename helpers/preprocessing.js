@@ -64,6 +64,10 @@ function preProcessSessionList(json, count){
  * @returns The preprocessed world information for viewing.
  */
 function preProcessWorld(json) {
+  if (json.description) {
+    json.description = preProcessName(json.description);
+  }
+
   if (json.thumbnailUri) {
     json.thumbnailUri = json.thumbnailUri.replace("resdb:///", "https://assets.resonite.com/").replace(".webp", "");
   } else {

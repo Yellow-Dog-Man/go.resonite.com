@@ -29,7 +29,7 @@ block content
               em By #{world.ownerName}
             div.thumbnail
               img(src=`${world.thumbnailUri}`, alt='', width='280', height='140', loading='lazy')
-            p.listing-item__description #{world.description || '(No Description)'}
+            p.listing-item__description !{world.description || '(No Description)'}
     +pagination(urlPath, apiInitBody.offset + 1, apiInitBody.offset + records.length, [query.pageIndex, parseInt(query.pageIndex) + 1])
   else
     p
