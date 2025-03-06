@@ -25,7 +25,7 @@ function preProcessName(name) {
  * @returns The transformed session object for viewing.
  */
 function preProcessSession(json) {
-  if (!json.thumbnailUrl || json.thumbnailUrl === "") {
+  if (!json.thumbnailUrl) {
     json.thumbnailUrl = NO_THUMBNAIL_URL;
   }
 
