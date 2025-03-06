@@ -109,7 +109,7 @@ function preProcessWorldList(json) {
  */
 export function preProcess(json, type) {
 
-    if (type !== "sessionList"  && json.name){
+    if (type !== "sessionList" && json.name){
         json.title = DOMPurify.sanitize(json.name); // No tags in title
 
         // Handle name for inclusion in the actual page.
