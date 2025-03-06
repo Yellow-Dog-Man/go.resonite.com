@@ -131,12 +131,14 @@ async function handle(type, req, res, next, reqInit = undefined) {
  * @return BaseWorldSessionInfo
  */
 function addMetadata(pageType, json, req, reqInit = undefined) {
+  const urlPath = req.getUrl();
   return Object.assign(json, {
     bodyClass: pageType,
     pageType,
     query: req.query,
     params: req.params,
-    urlPath: req.getUrl(),
+    urlPath,
+    ogThumbnailUrl: json.thumbnailUrl !== NO_THUMBNAIL_URL ? `${urlPath}/thumbnail` : NO_THUMBNAIL_URL,
     apiInitBody: JSON.parse(reqInit?.body ?? null)
   });
 }
