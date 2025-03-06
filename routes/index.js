@@ -113,8 +113,7 @@ async function handle(type, req, res, next, reqInit = undefined) {
 
     res.status(200).render(type, json);
   } catch (error) {
-    console.log(error);
-    return next(createError(503, "Unable to connect to Resonite API, please try again soon."));
+    return handleThrownError(error, next)
   }
 }
 
@@ -174,9 +173,23 @@ async function handleJson(type, req, res, next, reqInit = undefined) {
       provider_url: "https://resonite.com",
     });
   } catch (error) {
+    return handleThrownError(error, next)
+  }
+}
+
     console.log(error);
     return next(createError(503, "Unable to connect to Resonite API, please try again soon."));
   }
+/**
+ * Handles errors thrown when executing the route logic.
+ * 
+ * @param {Error} error The error that was thrown.
+ * @param {import('express').NextFunction} next The function to call to proceed to the next handler.
+ * @returns 
+ */
+async function handleThrownError(error, next) {
+  console.log(error);
+  return next(createError(503, "An error has occurred; please try again soon."));
 }
 
 /**
