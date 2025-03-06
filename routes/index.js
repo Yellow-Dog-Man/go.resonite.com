@@ -6,6 +6,7 @@ import { addMMC } from '../helpers/mmc.js';
 
 import fs from 'node:fs';
 import { createSearchRequestInit } from '../helpers/search.js';
+import { getFovShotFromEquirectangularImage } from '../helpers/360-image-processing.js';
 
 var router = express.Router();
 
@@ -19,6 +20,7 @@ router.get('/', function(req, res, next) {
 router.get('/credits', (req,res,next) => renderCredits(req,res,next));
 
 router.get('/session/:sessionId', (req,res, next) => handle("session", req, res, next));
+router.get(`/session/:sessionId/thumbnail`, (req, res, next) => handleThumbnail("session", req, res, next))
 router.get('/session/:sessionId/json', (req,res, next) => handleJson("session", req, res, next));
 
 router.get('/sessions', (req, res, next) => handle("sessionList", req, res, next));
@@ -30,6 +32,7 @@ router.get('/world/json', (req, res, next) => handleJson('worldList', req, res, 
 // Register world/ and record/
 for (const word of ["world", "record"]) {
   router.get(`/${word}/:ownerId/:recordId`, (req,res, next) => handle("world", req, res, next));
+  router.get(`/${word}/:ownerId/:recordId/thumbnail`, (req, res, next) => handleThumbnail("world", req, res, next))
   router.get(`/${word}/:ownerId/:recordId/json`, (req,res, next) => handleJson("world", req, res, next));
 }
 
@@ -177,9 +180,35 @@ async function handleJson(type, req, res, next, reqInit = undefined) {
   }
 }
 
-    console.log(error);
-    return next(createError(503, "Unable to connect to Resonite API, please try again soon."));
+/**
+ * Handles the thumbnail image used of the world or session for OpenGraph.
+ * 
+ * @param {HandleType} type The type of information this is whether it is a world or session.
+ * @param {import('express').Request} req The web request information.
+ * @param {import('express').Response} res The web response object.
+ * @param {import('express').NextFunction} next The function to call to proceed to the next handler.
+ * @returns A non-360 image of the world or session.
+ */
+async function handleThumbnail(type, req, res, next) {
+  try {
+
+    // The following six lines and the try/catch are utilized commonly when handling routes that require data from
+    // api.resonite.com. This is a good candidate for middleware for a router that needs to fetch this info.
+    var apiResponse = await fetch(getUrl(type, req));
+    if (!apiResponse.ok) {
+      var error = await createResoniteApiError(apiResponse, type);
+      return next(error);
+    }
+    var json = preProcess(await apiResponse.json(), type);
+
+    res.set("Content-Type", "image/webp");
+    res.status(200).send(await getFovShotFromEquirectangularImage(json.thumbnailUrl));
+
+  } catch (error) {
+    return handleThrownError(error, next)
   }
+}
+
 /**
  * Handles errors thrown when executing the route logic.
  * 

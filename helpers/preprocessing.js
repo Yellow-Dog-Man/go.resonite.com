@@ -69,6 +69,7 @@ function preProcessWorld(json) {
   } else {
     json.thumbnailUri = "/images/noThumbnail.png";
   }
+  json.thumbnailUrl = json.thumbnailUri;
 
   json.isFeatured = !!json.submissions?.[0]?.featured;
   // Convert to UTC to have a standard timezone
