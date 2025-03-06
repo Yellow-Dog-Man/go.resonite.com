@@ -1,4 +1,5 @@
 import DOMPurify from 'isomorphic-dompurify';
+import { NO_THUMBNAIL_URL } from "./constants.js";
 
 function sanitizeHTML(input) {
     return DOMPurify.sanitize(input, {ALLOWED_TAGS: ['span'], ALLOWED_ATTR: ['style']});
@@ -25,7 +26,7 @@ function preProcessName(name) {
  */
 function preProcessSession(json) {
   if (!json.thumbnailUrl || json.thumbnailUrl === "") {
-    json.thumbnailUrl = "/images/noThumbnail.png";
+    json.thumbnailUrl = NO_THUMBNAIL_URL;
   }
 
   json.description = `Host: ${json.hostUsername}.\n` +
@@ -67,7 +68,7 @@ function preProcessWorld(json) {
   if (json.thumbnailUri) {
     json.thumbnailUri = json.thumbnailUri.replace("resdb:///", "https://assets.resonite.com/").replace(".webp", "");
   } else {
-    json.thumbnailUri = "/images/noThumbnail.png";
+    json.thumbnailUri = NO_THUMBNAIL_URL;
   }
   json.thumbnailUrl = json.thumbnailUri;
 

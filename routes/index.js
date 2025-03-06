@@ -7,6 +7,7 @@ import { addMMC } from '../helpers/mmc.js';
 import fs from 'node:fs';
 import { createSearchRequestInit } from '../helpers/search.js';
 import { getFovShotFromEquirectangularImage } from '../helpers/360-image-processing.js';
+import { NO_THUMBNAIL_URL } from '../helpers/constants.js';
 
 var router = express.Router();
 
@@ -200,6 +201,10 @@ async function handleThumbnail(type, req, res, next) {
       return next(error);
     }
     var json = preProcess(await apiResponse.json(), type);
+
+    if (json.thumbnailUrl === NO_THUMBNAIL_URL) {
+      return res.redirect(NO_THUMBNAIL_URL);
+    }
 
     res.set("Content-Type", "image/webp");
     res.status(200).send(await getFovShotFromEquirectangularImage(json.thumbnailUrl));
