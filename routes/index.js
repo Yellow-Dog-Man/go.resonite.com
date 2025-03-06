@@ -151,8 +151,8 @@ async function handleJson(type, req, res, next, reqInit = undefined) {
   try {
     var apiResponse = await fetch(getUrl(type, req), reqInit);
     if (!apiResponse.ok) {
-      res.status(apiResponse.status);
-      return next();
+      var error = await createResoniteApiError(apiResponse, type);
+      return next(error);
     }
 
     var json = await apiResponse.json();
