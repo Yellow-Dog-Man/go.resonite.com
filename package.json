@@ -14,7 +14,7 @@
     "express": "~4.21.2",
     "http-errors": "~1.6.3",
     "isomorphic-dompurify": "^2.16.0",
-    "morgan": "~1.9.1",
+    "morgan": "~1.10.0",
     "pug": "^3.0.3"
   },
   "devDependencies": {
