@@ -19,10 +19,10 @@
   --color-mid-purple: #824aab;
   --color-sub-purple: #492f64;
   --color-dark-purple: #241e35;
-  --color-hero-blue: #61d1fa;
-  --color-mid-blue: #458fab;
-  --color-sub-blue: #284c5d;
-  --color-dark-blue: #1a2a36;
+  --color-hero-cyan: #61d1fa;
+  --color-mid-cyan: #458fab;
+  --color-sub-cyan: #284c5d;
+  --color-dark-cyan: #1a2a36;
   --color-hero-orange: #e69e50;
   --color-mid-orange: #976c3d;
   --color-sub-orange: #48392a;
@@ -110,15 +110,15 @@ footer {
 }
 
 .btn--blue {
-  background-color: var(--color-mid-blue);
+  background-color: var(--color-mid-cyan);
 }
 
 .btn--blue:hover {
-  background-color: var(--color-sub-blue)
+  background-color: var(--color-sub-cyan)
 }
 
 .btn--blue:active {
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-dark-cyan);
 }
 
 .btn--disabled {
@@ -145,7 +145,7 @@ footer {
 .btn--icon-only.btn--blue:hover,
 .btn--icon-only.btn--blue:focus {
   background: none;
-  color: var(--color-hero-blue)
+  color: var(--color-hero-cyan)
 }
 
 .btn--icon-only:hover {
@@ -157,11 +157,11 @@ footer {
 }
 
 .btn--icon-only.btn--blue:hover {
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-dark-cyan);
 }
 
 .btn--icon-only.btn--blue:active {
-  background-color: var(--color-sub-blue);
+  background-color: var(--color-sub-cyan);
 }
 
 .btn svg {
