@@ -13,7 +13,7 @@
     "debug": "~2.6.9",
     "express": "~4.21.2",
     "http-errors": "~1.6.3",
-    "isomorphic-dompurify": "^2.16.0",
+    "isomorphic-dompurify": "^2.23.0",
     "morgan": "~1.9.1",
     "pug": "^3.0.3"
   },
