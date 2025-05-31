@@ -11,7 +11,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "express": "~4.21.2",
+    "express": "~5.1.0",
     "http-errors": "~1.6.3",
     "isomorphic-dompurify": "^2.16.0",
     "morgan": "~1.9.1",
