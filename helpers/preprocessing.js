@@ -1,4 +1,5 @@
 import DOMPurify from 'isomorphic-dompurify';
+import { NO_THUMBNAIL_URL } from "./constants.js";
 
 function sanitizeHTML(input) {
     return DOMPurify.sanitize(input, {ALLOWED_TAGS: ['span'], ALLOWED_ATTR: ['style']});
@@ -24,8 +25,8 @@ function preProcessName(name) {
  * @returns The transformed session object for viewing.
  */
 function preProcessSession(json) {
-  if (!json.thumbnailUrl || json.thumbnailUrl === "") {
-    json.thumbnailUrl = "/images/noThumbnail.png";
+  if (!json.thumbnailUrl) {
+    json.thumbnailUrl = NO_THUMBNAIL_URL;
   }
 
   json.description = `Host: ${json.hostUsername}.\n` +
@@ -71,8 +72,9 @@ function preProcessWorld(json) {
   if (json.thumbnailUri) {
     json.thumbnailUri = json.thumbnailUri.replace("resdb:///", "https://assets.resonite.com/").replace(".webp", "");
   } else {
-    json.thumbnailUri = "/images/noThumbnail.png";
+    json.thumbnailUri = NO_THUMBNAIL_URL;
   }
+  json.thumbnailUrl = json.thumbnailUri;
 
   json.isFeatured = !!json.submissions?.[0]?.featured;
   // Convert to UTC to have a standard timezone
@@ -111,7 +113,7 @@ function preProcessWorldList(json) {
  */
 export function preProcess(json, type) {
 
-    if (type !== "sessionList"  && json.name){
+    if (type !== "sessionList" && json.name){
         json.title = DOMPurify.sanitize(json.name, {
           ALLOWED_TAGS: []
         }); // No tags in title

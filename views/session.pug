@@ -1,7 +1,7 @@
 extends layout
 
 block head
-    meta(property="og:image" content=thumbnailUrl)
+    meta(property="og:image" content=ogThumbnailUrl)
     meta(property="og:description" content!=description)
     meta(name="twitter:card" content="summary_large_image")
     link(type="application/json+oembed" href=urlPath + "/json")
