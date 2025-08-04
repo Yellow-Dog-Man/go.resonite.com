@@ -10,7 +10,7 @@
   "exports": "./start.js",
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "debug": "~4.4.1",
     "express": "~4.21.2",
     "gl-matrix": "3.4.3",
     "http-errors": "~2.0.0",
