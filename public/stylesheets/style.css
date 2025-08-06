@@ -1,4 +1,8 @@
 :root {
+  --color-neutrals-dark: #11151d;
+  --color-neutrals-mid: #2b2f35;
+  --color-neutrals-sub: #86888b;
+  --color-neutrals-light: #e1e1e0;
   --color-hero-yellow: #f8f770;
   --color-mid-yellow: #a0a14e;
   --color-sub-yellow: #484a2c;
@@ -7,11 +11,22 @@
   --color-mid-green: #3f9e44;
   --color-sub-green: #24512c;
   --color-dark-green: #192d24;
-  --color-hero-blue: #61d1fa;
-  --color-mid-blue: #458fab;
-  --color-sub-blue: #284c5d;
-  --color-dark-blue: #1a2a36;
   --color-hero-red: #ff7676; 
+  --color-mid-red: #ae5458;
+  --color-sub-red: #5d323a;
+  --color-dark-red: #1a1318;
+  --color-hero-purple: #ba64f2;
+  --color-mid-purple: #824aab;
+  --color-sub-purple: #492f64;
+  --color-dark-purple: #241e35;
+  --color-hero-cyan: #61d1fa;
+  --color-mid-cyan: #458fab;
+  --color-sub-cyan: #284c5d;
+  --color-dark-cyan: #1a2a36;
+  --color-hero-orange: #e69e50;
+  --color-mid-orange: #976c3d;
+  --color-sub-orange: #48392a;
+  --color-dark-orange: #292423;
   --background-body: #11151d;
   --border-radius: 8px;
   --btn--icon-only-size: 36px;
@@ -104,15 +119,15 @@ footer {
 }
 
 .btn--blue {
-  background-color: var(--color-mid-blue);
+  background-color: var(--color-mid-cyan);
 }
 
 .btn--blue:hover {
-  background-color: var(--color-sub-blue)
+  background-color: var(--color-sub-cyan)
 }
 
 .btn--blue:active {
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-dark-cyan);
 }
 
 .btn--disabled {
@@ -139,7 +154,7 @@ footer {
 .btn--icon-only.btn--blue:hover,
 .btn--icon-only.btn--blue:focus {
   background: none;
-  color: var(--color-hero-blue)
+  color: var(--color-hero-cyan)
 }
 
 .btn--icon-only:hover {
@@ -151,11 +166,11 @@ footer {
 }
 
 .btn--icon-only.btn--blue:hover {
-  background-color: var(--color-dark-blue);
+  background-color: var(--color-dark-cyan);
 }
 
 .btn--icon-only.btn--blue:active {
-  background-color: var(--color-sub-blue);
+  background-color: var(--color-sub-cyan);
 }
 
 .btn svg {

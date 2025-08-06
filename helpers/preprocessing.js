@@ -1,6 +1,11 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { NO_THUMBNAIL_URL } from "./constants.js";
 
+const START_COLOR_REGEX = /<color[=\s]\s*("?)(.+?)\1\s*>/i;
+// This matches supported hex values for color, supported color names, 'clear', and palette names.
+const START_COLOR_STRICT_REGEX = /<color[=\s]\s*((?<resoValue>#[\da-f]{8}|#[\da-f]{6}|#[\da-f]{3,4})|(?:("?)(?<resoValue>white|gray|black|red|green|blue|yellow|cyan|magenta|orange|purple|lime|pink|brown)\3)|("?)(?<resoValue>clear)\5|("?)(?:(?<paletteName>hero|mid|sub|dark)\.(?<paletteSubType>yellow|green|red|purple|cyan|orange))\7|(?:("?)(?<paletteName>neutrals)\.(?<paletteSubType>dark|mid|light)\10))\s*>/gi;
+const END_COLOR_REGEX = /<\/color>/gi;
+
 function sanitizeHTML(input) {
     return DOMPurify.sanitize(input, {ALLOWED_TAGS: ['span'], ALLOWED_ATTR: ['style']});
 }
@@ -21,10 +26,27 @@ function stripTags(input) {
  * @param {string} name The name of the world or session to sanitize.
  * @returns The processed world or session name that was sanitized.
  */
-function preProcessName(name) {
-    const start = /<color="?(.+?)"?>/gi;
-    const end = /<\/color>/gi;
-    var styleTags = name.replace(start, "<span style=\"color: $1;\">").replace(end, "</span>");
+export function preProcessName(name) {
+    let styleTags = name;
+
+    if (styleTags.match(START_COLOR_REGEX)) {
+      styleTags = name
+        .replace(START_COLOR_STRICT_REGEX, (...args) => {
+          /**  */
+          const { resoValue, paletteName, paletteSubType } = args.at(-1);
+
+          let colorValue = resoValue?.toLowerCase() ??
+            `var(--color-${paletteName.toLowerCase()}-${paletteSubType.toLowerCase()})`;
+
+          if (colorValue === 'clear') {
+            colorValue = 'transparent';
+          }
+
+          return `<span style="color: ${colorValue}">`;
+        })
+        .replace(END_COLOR_REGEX, "</span>");
+    }
+
     return sanitizeHTML(styleTags);
 }
 
