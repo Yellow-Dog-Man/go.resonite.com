@@ -15,22 +15,20 @@
   --background-body: #11151d;
   --border-radius: 8px;
   --btn--icon-only-size: 36px;
-}
-
-/* For chrome */
-a:-webkit-any-link {
-  cursor: url("/images/cursors/SVG/Color_InteractCursor.svg") 8 8, pointer;
+  --cursor-default: url("/images/cursors/default_cursor.svg") 8 8, default;
+  --cursor-pointer: url("/images/cursors/interact_cursor.svg") 8 8, pointer;
+  --cursor-text: url("/images/cursors/typing_cursor.svg") 10 10, text;
 }
 
 html, body {
   display: flex;
   height: 100vh;
   margin: 0;
-  cursor: url("/images/cursors/SVG/Color_Cursor.svg") 8 8, default;
 }
 
 html {
   justify-content: center;
+  cursor: var(--cursor-default)
 }
 
 body {
@@ -41,8 +39,8 @@ body {
   padding: 20px 10px;
 }
 
-a:hover{
-  cursor: url("/images/cursors/SVG/Color_InteractCursor.svg") 8 8, pointer;
+a {
+  cursor: var(--cursor-pointer)
 }
 
 :is(h1, h2, h3, h4, h5, h6) svg {
@@ -84,6 +82,10 @@ footer {
   width: 100%;
 }
 
+input[type=text] {
+  cursor: var(--cursor-text);
+}
+
 .btn {
   box-sizing: border-box;
   appearance: button;
@@ -96,6 +98,7 @@ footer {
   color: #FFF;
   font-size: 2.5em;
   transition: background-color var(--animation-duration) linear, border-color var(--animation-duration) linear, color var(--animation-duration) linear, box-shadow var(--animation-duration) linear, transform var(--animation-duration) ease;
+  cursor: var(--cursor-pointer);
 }
 
 

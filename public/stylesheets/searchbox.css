@@ -7,7 +7,6 @@
   align-items: center;
   position: relative;
   margin: 16px 0 24px;
-  cursor: url("/images/cursors/SVG/Color_TypingCursor.svg") 8 8, default;
 }
 
 .search__textinput {
