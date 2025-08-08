@@ -84,6 +84,12 @@ footer {
   width: 100%;
 }
 
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .btn {
   box-sizing: border-box;
   appearance: button;
