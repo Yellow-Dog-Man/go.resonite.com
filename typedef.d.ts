@@ -53,6 +53,12 @@ type BaseWorldSessionInfo = {
   name: string;
   /** The description of the world or session. */
   description: string;
+  /** The url of the world or session for go.resonite.com. */
+  goUri: string;
+  /** The url of the equirectangular (360) image for the world or session on go.resonite.com */
+  go360ImageUrl: string;
+  /** The url of the thumbnail image for the world or session on go.resonite.com */
+  goThumbnailUrl: string;
 };
 
 /**
@@ -145,5 +151,23 @@ type MmcConfigSearchResult = {
   /** `true` if the competition tag found in the world's tags is valid (i.e., the casing matches); otherwise, `false`. */
   isValidCompetitionTag: boolean;
   /** `true` if the competition is currently active; otherwise, `false` */
-  isCompetitionActive;
+  isCompetitionActive: boolean;
+};
+
+/**
+ * The fetch result of an image asset.
+ */
+type FetchImageResponse = {
+  /** The image pipe of the image to perform image operations on. */
+  imagePipe: import("sharp").Sharp?;
+  /** The HTTP status returned when trying to retrieve the image. */
+  httpStatusCode: number;
+  /** `true` if the https status code of the response is within 2xx; otherwise, `false`. */
+  isOk: boolean;
+  /** `true` if the given eTag does not match the eTag from the response or if an eTag was never given; otherwise, `false`. */
+  isNewerImage: boolean;
+  /** The content type of the image. */
+  contentType: string;
+  /** The eTag value of the image. */
+  eTag: string;
 };

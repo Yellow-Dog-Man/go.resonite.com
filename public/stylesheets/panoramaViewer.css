@@ -1,0 +1,47 @@
+:root {
+  --panorama-viewer-default-width: 800px;
+  --panorama-viewer-default-height: 450px;
+  --panorama-viewer-small-width: 280px;
+  --panorama-viewer-small-height: 140px;
+
+  --panorama-viewer-opacity-transition: opacity linear 0.35s;
+}
+
+.panorama-viewer {
+  display: flex;
+  position: relative;
+  width: var(--panorama-viewer-default-width);
+  height: var(--panorama-viewer-default-height);
+}
+
+.panorama-viewer--small {
+  width: var(--panorama-viewer-small-width);
+  height: var(--panorama-viewer-small-height);
+}
+
+.panorama-viewer .panorama-viewer__fallback-img {
+  max-width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+
+.panorama-viewer .panorama-viewer__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: var(--panorama-viewer-opacity-transition);
+  z-index: 1;
+}
+
+.panorama-viewer--ready .panorama-viewer__canvas {
+  opacity: 1;
+}
+
+/** CSS Hacks for Vendor Panorama Viewer */
+
+.psv-container {
+  background: transparent;
+}

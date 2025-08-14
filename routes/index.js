@@ -6,7 +6,10 @@ import { addMMC } from "../helpers/mmc.js";
 
 import fs from "node:fs";
 import { createSearchRequestInit } from "../helpers/search.js";
-import { getFovShotFromEquirectangularImage } from "../helpers/360-image-processing.js";
+import {
+  getFovShotFromEquirectangularImage,
+  fetchImage,
+} from "../helpers/360-image-processing.js";
 import { NO_THUMBNAIL_URL } from "../helpers/constants.js";
 
 var router = express.Router();
@@ -29,7 +32,9 @@ router.get(`/session/:sessionId/thumbnail`, (req, res, next) =>
 router.get("/session/:sessionId/json", (req, res, next) =>
   handleJson("session", req, res, next),
 );
-
+router.get("/session/:sessionId/360-image", (req, res, next) =>
+  handle360Image("session", req, res, next),
+);
 router.get("/sessions", (req, res, next) =>
   handle("sessionList", req, res, next),
 );
@@ -66,6 +71,9 @@ for (const word of ["world", "record"]) {
   );
   router.get(`/${word}/:ownerId/:recordId/json`, (req, res, next) =>
     handleJson("world", req, res, next),
+  );
+  router.get(`/${word}/:ownerId/:recordId/360-image`, (req, res, next) =>
+    handle360Image("world", req, res, next),
   );
 }
 
@@ -191,11 +199,7 @@ function addMetadata(pageType, json, req, reqInit = undefined) {
   const urlPath = new URL(req.getUrl());
 
   const ogThumbnailUrl = new URL(urlPath);
-  if (json.thumbnailUrl !== NO_THUMBNAIL_URL) {
-    ogThumbnailUrl.pathname += "/thumbnail";
-  } else {
-    ogThumbnailUrl.pathname = NO_THUMBNAIL_URL;
-  }
+  ogThumbnailUrl.pathname = json.goThumbnailUrl;
 
   const jsonUrl = new URL(urlPath);
   jsonUrl.pathname += "/json";
@@ -263,26 +267,122 @@ async function handleJson(type, req, res, next, reqInit = undefined) {
  */
 async function handleThumbnail(type, req, res, next) {
   try {
-    // The following six lines and the try/catch are utilized commonly when handling routes that require data from
-    // api.resonite.com. This is a good candidate for middleware for a router that needs to fetch this info.
-    var apiResponse = await fetch(getUrl(type, req));
-    if (!apiResponse.ok) {
-      var error = await createResoniteApiError(apiResponse, type);
-      return next(error);
-    }
-    var json = preProcess(await apiResponse.json(), type);
+    const imageFetchResponse = await handleImage(type, req, res, next);
 
-    if (json.thumbnailUrl === NO_THUMBNAIL_URL) {
-      return res.redirect(NO_THUMBNAIL_URL);
+    if (imageFetchResponse == null) {
+      return;
+    }
+
+    const { imagePipe, eTag, isOk, httpStatusCode } = imageFetchResponse;
+
+    if (!isOk) {
+      return httpStatusCode === 404
+        ? res.redirect(NO_THUMBNAIL_URL)
+        : res.status(httpStatusCode);
     }
 
     res.set("Content-Type", "image/webp");
-    res
-      .status(200)
-      .send(await getFovShotFromEquirectangularImage(json.thumbnailUrl));
+    res.set("eTag", eTag);
+    res.status(200).send(await getFovShotFromEquirectangularImage(imagePipe));
   } catch (error) {
     return handleThrownError(error, next);
   }
+}
+
+/**
+ * Handles the 360 image used of the world or session.
+ *
+ * @param {HandleType} type The type of information this is whether it is a world or session.
+ * @param {import('express').Request} req The web request information.
+ * @param {import('express').Response} res The web response object.
+ * @param {import('express').NextFunction} next The function to call to proceed to the next handler.
+ * @returns A 360 image of the world or session.
+ */
+async function handle360Image(type, req, res, next) {
+  try {
+    const imageFetchResponse = await handleImage(type, req, res, next);
+
+    if (imageFetchResponse == null) {
+      return;
+    }
+
+    const { imagePipe, contentType, eTag, isOk, httpStatusCode } =
+      imageFetchResponse;
+
+    if (!isOk) {
+      return res.status(httpStatusCode).end();
+    }
+
+    res.set("Content-Type", contentType);
+    res.set("eTag", eTag);
+    res.status(httpStatusCode).send(await imagePipe?.webp().toBuffer());
+  } catch (error) {
+    return handleThrownError(error, next);
+  }
+}
+
+/**
+ * Handles images associated with a world or session. These are usually the thumbnail or
+ * equirectangular images.
+ *
+ * @param {HandleType} type The type of information this is whether it is a world or session.
+ * @param {import('express').Request} req The web request information.
+ * @param {import('express').Response} res The web response object.
+ * @param {import('express').NextFunction} next The function to call to proceed to the next handler.
+ * @returns {Promise<FetchImageResponse>} The response of the image fetch.
+ */
+async function handleImage(type, req, res, next) {
+  const json = await fetchResoniteData(type, req, next);
+
+  if (json == null) {
+    return res.status(404);
+  }
+
+  preProcess(json, type);
+
+  if (json.thumbnailUrl === NO_THUMBNAIL_URL) {
+    return {
+      isOk: false,
+      httpStatusCode: 404,
+    };
+  }
+
+  const eTagFromRequest = req.get("If-None-Match");
+  const imageFetchResponse = await fetchImage(
+    json.thumbnailUrl,
+    eTagFromRequest,
+  );
+
+  if (!imageFetchResponse.isOk) {
+    return {
+      isOk: false,
+      httpStatusCode: imageFetchResponse.httpStatusCode,
+    };
+  } else if (!imageFetchResponse.isNewerImage) {
+    res.status(304).end();
+    return;
+  }
+
+  return imageFetchResponse;
+}
+
+/**
+ * Fetch data for a world or session from SkyFrost (i.e., Resonite).
+ *
+ * @param {HandleType} type The type of information this is whether it is a world or session.
+ * @param {import('express').Request} req The web request information.
+ * @returns The API response from Resonite's Cloud.
+ */
+async function fetchResoniteData(type, req, next) {
+  // The following seven lines are utilized commonly when handling routes that require data from
+  // api.resonite.com. This is a good candidate for middleware for a router that needs to fetch this info.
+  var apiResponse = await fetch(getUrl(type, req));
+  if (!apiResponse.ok) {
+    var error = await createResoniteApiError(apiResponse, type);
+    return next(error);
+  }
+  const responseJson = await apiResponse.json();
+  return responseJson;
 }
 
 /**

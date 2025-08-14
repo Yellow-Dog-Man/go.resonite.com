@@ -1,0 +1,4 @@
+mixin panorama-viewer(imageUrl, fallbackUrl, imageAlt)
+  .panorama-viewer(data-panorama=imageUrl, data-image-alt=imageAlt)
+    .panorama-viewer__canvas
+    img.panorama-viewer__fallback-img(src=fallbackUrl, alt=imageAlt)

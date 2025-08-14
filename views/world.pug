@@ -1,5 +1,6 @@
 extends layout
 
+include mixins/panorama-viewer.pug
 include mixins/mmc.pug
 
 block head
@@ -8,16 +9,20 @@ block head
   meta(property="og:description", content=ogDescription)
   meta(name="twitter:card", content="summary_large_image")
   link(type="application/json+oembed", href=jsonUrl)
+  link(
+    rel="stylesheet",
+    href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css"
+  )
+  link(rel="stylesheet", href="/stylesheets/panoramaViewer.css")
+
+block client-scripts
+  script(type="module", src="/js/panorama-viewer.js")
 
 block content
   h1 !{ name }
 
   .center
-    img(
-      src=thumbnailUri,
-      alt=`A preview image of the '${title}' world.`,
-      onerror=`this.onerror=null; this.src='${noThumbnailUrl}';`
-    )
+    +panorama-viewer(go360ImageUrl, goThumbnailUrl, `A preview image of the '${title}' world.`)
 
   dl.infobox
     .row

@@ -82,6 +82,8 @@ function preProcessSession(json) {
     `Users ${json.totalJoinedUsers}/${json.maxUsers}:${json.sessionUsers.map((user) => user.username).join(", ")}.\n` +
     `Version: ${json.appVersion}`;
 
+  addGoUrls(json, `/session/${json.sessionId}`);
+
   return json;
 }
 
@@ -140,6 +142,8 @@ function preProcessWorld(json) {
   json.creationTime = new Date(json.creationTime).toUTCString();
   json.isPublished = json.submissions != null && json.submissions.length > 0;
 
+  addGoUrls(json, `/world/${json.ownerId}/${json.id}`);
+
   return json;
 }
 
@@ -152,11 +156,22 @@ function preProcessWorld(json) {
 function preProcessWorldList(json) {
   for (const world of json.records) {
     world.name = preProcessName(world.name);
-    world.goUri = `/world/${world.ownerId}/${world.id}`;
     preProcessWorld(world);
   }
 
   return json;
+}
+
+/**
+ * Adds go.resonite.com URLs to the world or session JSON.
+ *
+ * @param {BaseWorldSessionInfo} json The world or session object from SkyFrost to transform.
+ * @param {string} goUrl The base url for the world or session
+ */
+function addGoUrls(json, goUrl) {
+  json.goUri = goUrl;
+  json.go360ImageUrl = `${goUrl}/360-image`;
+  json.goThumbnailUrl = `${goUrl}/thumbnail`;
 }
 
 /**

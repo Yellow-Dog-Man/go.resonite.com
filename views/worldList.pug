@@ -41,12 +41,11 @@ block content
               em By #{ world.ownerName }
             .thumbnail
               img(
-                src=`${world.thumbnailUri}`,
+                src=world.goThumbnailUrl,
                 alt="",
                 width="280",
                 height="140",
-                loading="lazy",
-                onerror=`this.onerror=null; this.src='${noThumbnailUrl}';`
+                loading="lazy"
               )
             p.listing-item__description !{ world.description || '(No Description)' }
     +pagination(urlPath, apiInitBody.offset + 1, apiInitBody.offset + records.length, [query.pageIndex, parseInt(query.pageIndex) + 1])

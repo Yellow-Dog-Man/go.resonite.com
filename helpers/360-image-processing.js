@@ -21,14 +21,12 @@ const degToRad = (deg) => (deg * Math.PI) / 180;
 /**
  * Extracts a FOV shot from an equirectangular thumbnail image.
  *
- * @param {string} url The url of the thumbnail image.
+ * @param {import('sharp').Sharp} imagePipe The image pipe of the image to perform image operations on.
  * @returns
  */
-export async function getFovShotFromEquirectangularImage(url) {
-  const response = await fetch(url);
-  const inputPipe = sharp(await response.arrayBuffer());
-  const { width: inputWidth, height: inputHeight } = await inputPipe.metadata();
-  const inputBuffer = await inputPipe.ensureAlpha().raw().toBuffer();
+export async function getFovShotFromEquirectangularImage(imagePipe) {
+  const { width: inputWidth, height: inputHeight } = await imagePipe.metadata();
+  const inputBuffer = await imagePipe.ensureAlpha().raw().toBuffer();
   const inputData = new Uint8Array(inputBuffer);
 
   const outputData = new Uint8Array(OUTPUT_WIDTH * OUTPUT_HEIGHT * 4);
@@ -97,4 +95,31 @@ export async function getFovShotFromEquirectangularImage(url) {
     .toBuffer();
 
   return outputBuffer;
+}
+
+/**
+ * Fetch an image based on the given URL. These are usually images from assets.resonite.com.
+ *
+ * @param {string|URL} url The url of the asset.
+ * @param {string?} eTagFromRequest The eTag value that was given from a previous request for the asset.
+ * @returns {Promise<FetchImageResponse>} The response of the image fetch.
+ */
+export async function fetchImage(url, eTagFromRequest = null) {
+  const response = await fetch(url);
+  const eTagFromResponse = response.headers.get("etag");
+
+  const isNewerImage =
+    eTagFromRequest == null || eTagFromRequest !== eTagFromResponse;
+
+  const imagePipe =
+    response.ok && isNewerImage ? sharp(await response.arrayBuffer()) : null;
+
+  return {
+    imagePipe,
+    httpStatusCode: response.status,
+    isOk: response.ok,
+    isNewerImage,
+    contentType: response.headers.get("content-type"),
+    eTag: eTagFromResponse,
+  };
 }

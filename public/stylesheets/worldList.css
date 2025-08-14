@@ -1,6 +1,7 @@
 :root {
   --listing-spacing: 8px;
   --listing-line-clamp: 3;
+  --listing-min-height: 146px;
 }
 
 .listing {
@@ -20,6 +21,7 @@
     "thumbnail author"
     "thumbnail description";
   gap: var(--listing-spacing);
+  min-height: var(--listing-min-height);
   box-sizing: border-box;
   padding: var(--listing-spacing);
   border: 1px solid var(--border);
