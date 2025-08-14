@@ -105,6 +105,7 @@ input::placeholder {
 input[type=checkbox]+label {
   cursor: pointer;
   user-select: none;
+}
 
 input[type=text] {
   cursor: var(--cursor-text);
