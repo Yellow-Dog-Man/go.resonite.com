@@ -1,0 +1,7 @@
+mixin badge(text, colorName, url)
+  li.badge(class=`badge-${colorName}`)
+    block
+    if(url)
+      a(href=url) #{ text }
+    else
+      | #{ text }
