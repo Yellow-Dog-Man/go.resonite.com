@@ -24,7 +24,7 @@
     "sharp": "0.34.3"
   },
   "devDependencies": {
-    "@eslint/js": "9.33.0",
+    "@eslint/js": "9.34.0",
     "@prettier/plugin-pug": "3.4.0",
     "all-contributors-cli": "^6.26.1",
     "eslint": "9.33.0",
