@@ -44,6 +44,7 @@
   justify-self: center;
   max-width: 280px;
   max-height: 140px;
+  background: #000;
 }
 
 .listing-item > .thumbnail > img {

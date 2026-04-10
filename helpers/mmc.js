@@ -31,8 +31,8 @@ function findMmcConfig(tags, entryDate) {
   }
 
   const isCompetitionActive =
-    Date.now() >= mmcConfig?.startDate.getMilliseconds() &&
-    Date.now() < mmcConfig?.endDate.getMilliseconds();
+    Date.now() >= mmcConfig?.startDate.getTime() &&
+    Date.now() < mmcConfig?.endDate.getTime();
 
   return {
     mmcConfig,
